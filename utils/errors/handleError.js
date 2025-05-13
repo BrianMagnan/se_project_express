@@ -1,18 +1,6 @@
-class NotFoundError extends Error {
-  constructor(message) {
-    super(message);
-    this.statusCode = 404;
-  }
-}
+/* eslint-disable no-console */
 
-class BadRequestError extends Error {
-  constructor(message) {
-    super(message);
-    this.statusCode = 400;
-  }
-}
-
-const handleError = (err, req, res, next) => {
+const handleError = (err, res) => {
   console.error(err);
 
   if (err.name === "DocumentNotFoundError") {
@@ -44,8 +32,4 @@ const handleError = (err, req, res, next) => {
   });
 };
 
-module.exports = {
-  NotFoundError,
-  BadRequestError,
-  handleError,
-};
+module.exports = handleError;

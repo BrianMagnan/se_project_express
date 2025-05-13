@@ -21,7 +21,8 @@
   "homepage": "https://github.com/BrianMagnan/se_project_express#readme",
   "dependencies": {
     "express": "^5.1.0",
-    "mongoose": "^8.14.1"
+    "mongoose": "^8.14.1",
+    "validator": "^13.9.0"
   },
   "devDependencies": {
     "eslint": "^8.57.1",
