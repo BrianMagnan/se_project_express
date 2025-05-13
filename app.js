@@ -4,7 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const userRouter = require("./routes/users");
 const clothingItemsRouter = require("./routes/clothingItems");
-const { handleError } = require("./utils/errors");
+const handleError = require("./utils/errors/handleError");
 
 const { PORT = 3001 } = process.env;
 const app = express();
