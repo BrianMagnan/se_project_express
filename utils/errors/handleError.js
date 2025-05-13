@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const handleError = (err, res) => {
+const handleError = (err, req, res, next) => {
   console.error(err);
 
   if (err.name === "DocumentNotFoundError") {
