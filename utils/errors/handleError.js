@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const handleError = (err, req, res) => {
+const handleError = (err, req, res, next) => {
   console.error(err);
 
   const NOT_FOUND = 404;
@@ -8,32 +8,33 @@ const handleError = (err, req, res) => {
   const SERVER_ERROR = 500;
 
   if (err.name === "DocumentNotFoundError") {
-    return res.status(NOT_FOUND).send({
+    res.status(NOT_FOUND).send({
       message: "Requested resource not found",
     });
   }
 
   if (err.name === "CastError") {
-    return res.status(BAD_REQUEST).send({
+    res.status(BAD_REQUEST).send({
       message: "Invalid ID format",
     });
   }
 
   if (err.name === "ValidationError") {
-    return res.status(BAD_REQUEST).send({
+    res.status(BAD_REQUEST).send({
       message: "Invalid data provided",
     });
   }
 
   if (err.statusCode) {
-    return res.status(err.statusCode).send({
+    res.status(err.statusCode).send({
       message: err.message,
     });
   }
 
-  return res.status(SERVER_ERROR).send({
+  res.status(SERVER_ERROR).send({
     message: "An error occurred on the server",
   });
+  next();
 };
 
 module.exports = handleError;
