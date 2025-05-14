@@ -1,22 +1,19 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
+const express = require("express");
+const userRouter = require("./users");
+const clothingItemsRouter = require("./clothingItems");
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 30,
-  },
-  avatar: {
-    type: String,
-    required: true,
-    validate: {
-      validator(value) {
-        return validator.isURL(value);
-      },
-      message: "You must enter a valid URL",
-    },
-  },
+const router = express.Router();
+
+// User routes
+router.use("/users", userRouter);
+
+// Clothing items routes
+router.use("/items", clothingItemsRouter);
+
+// 404 handler for unknown routes
+router.use((req, res) => {
+  const NOT_FOUND = 404;
+  res.status(NOT_FOUND).send({ message: "Requested resource not found" });
 });
-module.exports = mongoose.model("user", userSchema);
+
+module.exports = router;

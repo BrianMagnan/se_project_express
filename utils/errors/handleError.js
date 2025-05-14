@@ -1,23 +1,26 @@
 /* eslint-disable no-console */
 
-// eslint-disable-next-line no-unused-vars
-const handleError = (err, req, res, next) => {
+const handleError = (err, req, res) => {
   console.error(err);
 
+  const NOT_FOUND = 404;
+  const BAD_REQUEST = 400;
+  const SERVER_ERROR = 500;
+
   if (err.name === "DocumentNotFoundError") {
-    return res.status(404).send({
+    return res.status(NOT_FOUND).send({
       message: "Requested resource not found",
     });
   }
 
   if (err.name === "CastError") {
-    return res.status(400).send({
+    return res.status(BAD_REQUEST).send({
       message: "Invalid ID format",
     });
   }
 
   if (err.name === "ValidationError") {
-    return res.status(400).send({
+    return res.status(BAD_REQUEST).send({
       message: "Invalid data provided",
     });
   }
@@ -28,7 +31,7 @@ const handleError = (err, req, res, next) => {
     });
   }
 
-  return res.status(500).send({
+  return res.status(SERVER_ERROR).send({
     message: "An error occurred on the server",
   });
 };

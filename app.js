@@ -2,11 +2,11 @@
 
 const express = require("express");
 const mongoose = require("mongoose");
-const userRouter = require("./routes/users");
-const clothingItemsRouter = require("./routes/clothingItems");
-const { handleError } = require("./utils/errors/index");
+const routes = require("./routes");
+const handleError = require("./utils/errors/handleError");
 
 const { PORT = 3001 } = process.env;
+
 const app = express();
 
 app.use(express.json());
@@ -17,8 +17,11 @@ app.use((req, res, next) => {
   };
   next();
 });
-app.use("/users", userRouter);
-app.use("/items", clothingItemsRouter);
+
+// Use all routes from the central router
+app.use(routes);
+
+// Error handler
 app.use(handleError);
 
 mongoose
