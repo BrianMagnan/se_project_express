@@ -2,7 +2,6 @@ const express = require("express");
 const { NOT_FOUND } = require("../utils/constants/httpStatusCodes");
 const userRouter = require("./users");
 const clothingItemsRouter = require("./clothingItems");
-const { login, createUser } = require("../controllers/users");
 
 const router = express.Router();
 
