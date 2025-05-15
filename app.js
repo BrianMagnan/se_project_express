@@ -18,10 +18,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Use all routes from the central router
 app.use(routes);
-
-// Error handler
 app.use(handleError);
 
 mongoose

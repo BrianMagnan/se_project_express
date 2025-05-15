@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
+const {
+  NOT_FOUND,
+  BAD_REQUEST,
+  INTERNAL_SERVER_ERROR,
+} = require("../constants/httpStatusCodes");
 
 const handleError = (err, req, res, next) => {
   console.error(err);
-
-  const NOT_FOUND = 404;
-  const BAD_REQUEST = 400;
-  const SERVER_ERROR = 500;
 
   if (err.name === "DocumentNotFoundError") {
     res.status(NOT_FOUND).send({
@@ -31,7 +32,7 @@ const handleError = (err, req, res, next) => {
     });
   }
 
-  res.status(SERVER_ERROR).send({
+  res.status(INTERNAL_SERVER_ERROR).send({
     message: "An error occurred on the server",
   });
   next();
