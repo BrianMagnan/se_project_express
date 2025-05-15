@@ -5,37 +5,37 @@ const {
   INTERNAL_SERVER_ERROR,
 } = require("../constants/httpStatusCodes");
 
-const handleError = (err, req, res, next) => {
+// eslint-disable-next-line no-unused-vars
+const handleError = (err, req, res, _next) => {
   console.error(err);
 
   if (err.name === "DocumentNotFoundError") {
-    res.status(NOT_FOUND).send({
+    return res.status(NOT_FOUND).send({
       message: "Requested resource not found",
     });
   }
 
   if (err.name === "CastError") {
-    res.status(BAD_REQUEST).send({
+    return res.status(BAD_REQUEST).send({
       message: "Invalid ID format",
     });
   }
 
   if (err.name === "ValidationError") {
-    res.status(BAD_REQUEST).send({
+    return res.status(BAD_REQUEST).send({
       message: "Invalid data provided",
     });
   }
 
   if (err.statusCode) {
-    res.status(err.statusCode).send({
+    return res.status(err.statusCode).send({
       message: err.message,
     });
   }
 
-  res.status(INTERNAL_SERVER_ERROR).send({
+  return res.status(INTERNAL_SERVER_ERROR).send({
     message: "An error occurred on the server",
   });
-  next();
 };
 
 module.exports = handleError;
