@@ -12,9 +12,6 @@ router.use("/users", userRouter);
 // Clothing items routes
 router.use("/items", clothingItemsRouter);
 
-router.post("/signin", login);
-router.post("/signup", createUser);
-
 // 404 handler for unknown routes
 router.use((req, res) => {
   res.status(NOT_FOUND).send({ message: "Requested resource not found" });
