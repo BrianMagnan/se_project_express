@@ -1,7 +1,9 @@
 /* eslint-disable no-console */
 
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const routes = require("./routes");
 const handleError = require("./utils/errors/handleError");
 
@@ -11,18 +13,13 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use((req, res, next) => {
-  req.user = {
-    _id: "6822750cb614cbf8e495207e",
-  };
-  next();
-});
+app.use(cors());
 
 app.use(routes);
 app.use(handleError);
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/wtwr_db")
+  .connect("mongodb://localhost:27017/wtwr_db")
   .then(() => {
     console.log("Connected to MongoDB");
     app.listen(PORT, () => {

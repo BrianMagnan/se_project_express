@@ -3,27 +3,28 @@ const {
   NOT_FOUND,
   BAD_REQUEST,
   INTERNAL_SERVER_ERROR,
+  CONFLICT,
+  UNAUTHORIZED,
+  FORBIDDEN,
 } = require("../constants/httpStatusCodes");
 
 // eslint-disable-next-line no-unused-vars
 const handleError = (err, req, res, _next) => {
-  console.error(err);
-
   if (err.name === "DocumentNotFoundError") {
     return res.status(NOT_FOUND).send({
-      message: "Requested resource not found",
+      message: "Not found",
     });
   }
 
   if (err.name === "CastError") {
     return res.status(BAD_REQUEST).send({
-      message: "Invalid ID format",
+      message: "Invalid ID",
     });
   }
 
   if (err.name === "ValidationError") {
     return res.status(BAD_REQUEST).send({
-      message: "Invalid data provided",
+      message: err.message || "Invalid data provided",
     });
   }
 
@@ -33,8 +34,26 @@ const handleError = (err, req, res, _next) => {
     });
   }
 
+  if (err.code === 11000) {
+    return res.status(CONFLICT).send({
+      message: "Email already exists",
+    });
+  }
+
+  if (err.name === "UnauthorizedError") {
+    return res.status(UNAUTHORIZED).send({
+      message: "Authentication required",
+    });
+  }
+
+  if (err.name === "ForbiddenError") {
+    return res.status(FORBIDDEN).send({
+      message: "You don't have permission to perform this action",
+    });
+  }
+
   return res.status(INTERNAL_SERVER_ERROR).send({
-    message: "An error occurred on the server",
+    message: "An unexpected error occurred on the server",
   });
 };
 

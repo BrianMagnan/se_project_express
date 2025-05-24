@@ -1,29 +1,66 @@
-# WTWR (What to Wear?): Back End
+# WTWR Backend Server
 
-## Project Description
+The back-end project is focused on creating a server for the WTWR application. You'll gain a deeper understanding of how to work with databases, set up security and testing, and deploy web applications on a remote machine. The eventual goal is to create a server with an API and user authorization.
 
-This project creates back-end functionality that will be impimented in the WTWR project from previous sprints.
-This ustalizes contollers, routes, models and error messages to post/pull/delete data, direct data, specify requirements for data, and notify of errors respectivly.
+## Features
 
-## Technologies and Techniques Used
+- User authentication with JWT
+- MongoDB database integration
+- RESTful API endpoints for clothing items
+- Error handling middleware
+- Input validation
+- Security best practices
 
-- **Node.js**: Runtime environment for server-side JavaScript
-- **Express.js**: Web application framework for Node.js
-- **MongoDB**: NoSQL database for storing user and clothing item data
-- **Mongoose**: MongoDB object modeling tool
-- **REST API**: Implementation of RESTful API endpoints
-- **Error Handling**: Custom error classes and middleware for consistent error responses
-- **Input Validation**: Data validation using Mongoose schemas and validators
-- **Environment Variables**: Configuration management using environment variables
-- **ESLint**: Code linting for maintaining code quality
-- **Git**: Version control system
+## Technologies Used
+
+- Node.js
+- Express.js
+- MongoDB with Mongoose
+- JWT for authentication
+- bcryptjs for password hashing
+- ESLint for code quality
+- Jest for testing
 
 ## Running the Project
 
-`npm run start` — to launch the server
+```bash
+# Install dependencies
+npm install
 
-`npm run dev` — to launch the server with the hot reload feature
+# Start the server
+npm run start
 
-### Testing
+# Start the server with hot reload (development)
+npm run dev
 
-Before committing your code, make sure you edit the file `sprint.txt` in the root folder. The file `sprint.txt` should contain the number of the sprint you're currently working on. For ex. 12
+# Run linter
+npm run lint
+```
+
+## API Endpoints
+
+### Users
+
+- POST /signin - User login
+- POST /signup - User registration
+- GET /users/me - Get current user
+- PATCH /users/me - Update user profile
+
+### Clothing Items
+
+- GET /items - Get all items
+- POST /items - Create new item
+- DELETE /items/:id - Delete item
+- PUT /items/:id/likes - Like item
+- DELETE /items/:id/likes - Unlike item
+
+## Environment Variables
+
+Create a .env file in the root directory with the following variables:
+
+```
+PORT=3001
+MONGODB_URI=mongodb://localhost:27017/wtwr_db
+JWT_SECRET=your-secret-key
+NODE_ENV=development
+```

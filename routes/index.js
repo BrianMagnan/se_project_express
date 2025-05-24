@@ -1,19 +1,18 @@
 const express = require("express");
-const { NOT_FOUND } = require("../utils/constants/httpStatusCodes");
 const userRouter = require("./users");
 const clothingItemsRouter = require("./clothingItems");
+const { createUser, login } = require("../controllers/users");
 
 const router = express.Router();
 
-// User routes
-router.use("/users", userRouter);
+router.post("/signup", createUser);
+router.post("/signin", login);
 
-// Clothing items routes
+router.use("/users", userRouter);
 router.use("/items", clothingItemsRouter);
 
-// 404 handler for unknown routes
 router.use((req, res) => {
-  res.status(NOT_FOUND).send({ message: "Requested resource not found" });
+  res.status(404).send({ message: "Requested resource not found" });
 });
 
 module.exports = router;
