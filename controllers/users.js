@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const {
   NotFoundError,
@@ -5,8 +6,6 @@ const {
   UnauthorizedError,
   ConflictError,
 } = require("../utils/errors");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 const config = require("../utils/config");
 
 const getUsers = (req, res, next) => {
@@ -18,7 +17,6 @@ const getUsers = (req, res, next) => {
 
 const createUser = async (req, res, next) => {
   const { name, avatar, email, password } = req.body;
-  console.log("Creating user:", { name, email });
 
   if (!name || !avatar || !email || !password) {
     return next(
@@ -38,17 +36,15 @@ const createUser = async (req, res, next) => {
       email,
       password,
     });
-    console.log("User created:", user._id);
 
     const userWithoutPassword = user.toObject();
     delete userWithoutPassword.password;
-    res.status(201).send(userWithoutPassword);
+    return res.status(201).send(userWithoutPassword);
   } catch (err) {
-    console.error("Create user error:", err);
     if (err.code === 11000) {
       return next(new ConflictError("Email already exists"));
     }
-    next(err);
+    return next(err);
   }
 };
 
@@ -64,26 +60,21 @@ const getUser = (req, res, next) => {
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
-  console.log("Login attempt:", { email });
 
   if (!email || !password) {
     return next(new BadRequestError("Email and password are required"));
   }
 
   try {
-    console.log("Finding user by credentials...");
     const user = await User.findUserByCredentials(email, password);
-    // console.log("User found:", user._id);
 
     const token = jwt.sign({ _id: user._id }, config.jwtSecret, {
       expiresIn: config.jwtExpiresIn,
     });
-    // console.log("Token generated");
 
-    res.send({ token });
+    return res.send({ token });
   } catch (err) {
-    console.error("Login error:", err.message);
-    next(new UnauthorizedError("Incorrect email or password"));
+    return next(new UnauthorizedError("Incorrect email or password"));
   }
 };
 
@@ -93,9 +84,9 @@ const getCurrentUser = async (req, res, next) => {
     if (!user) {
       return next(new NotFoundError("User not found"));
     }
-    res.send(user);
+    return res.send(user);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -111,7 +102,10 @@ const updateUser = (req, res, next) => {
     return next(new BadRequestError("No valid fields to update"));
   }
 
-  User.findByIdAndUpdate(userId, updates, { new: true, runValidators: true })
+  return User.findByIdAndUpdate(userId, updates, {
+    new: true,
+    runValidators: true,
+  })
     .select("-password")
     .orFail(() => new NotFoundError("User not found"))
     .then((user) => res.send(user))

@@ -60,18 +60,10 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(
 };
 
 userSchema.pre("save", async function preSave(next) {
-  if (!this.isModified("password")) {
-    return next();
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 10);
   }
-
-  try {
-    const hash = await bcrypt.hash(this.password, 10);
-
-    this.password = hash;
-    next();
-  } catch (err) {
-    next(err);
-  }
+  return next();
 });
 
 module.exports = mongoose.model("user", userSchema);
