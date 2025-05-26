@@ -8,13 +8,6 @@ const {
 } = require("../utils/errors");
 const config = require("../utils/config");
 
-const getUsers = (req, res, next) => {
-  User.find({})
-    .select("-password")
-    .then((users) => res.send(users))
-    .catch(next);
-};
-
 const createUser = async (req, res, next) => {
   const { name, avatar, email, password } = req.body;
 
@@ -48,16 +41,6 @@ const createUser = async (req, res, next) => {
   }
 };
 
-const getUser = (req, res, next) => {
-  const { userId } = req.params;
-
-  User.findById(userId)
-    .select("-password")
-    .orFail(() => new NotFoundError("User not found"))
-    .then((user) => res.send(user))
-    .catch(next);
-};
-
 const login = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -74,7 +57,10 @@ const login = async (req, res, next) => {
 
     return res.send({ token });
   } catch (err) {
-    return next(new UnauthorizedError("Incorrect email or password"));
+    if (err.message === "Incorrect email or password") {
+      return next(new UnauthorizedError("Incorrect email or password"));
+    }
+    return next(err);
   }
 };
 
@@ -113,8 +99,6 @@ const updateUser = (req, res, next) => {
 };
 
 module.exports = {
-  getUsers,
-  getUser,
   createUser,
   login,
   getCurrentUser,
