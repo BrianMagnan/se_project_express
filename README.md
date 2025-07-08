@@ -64,3 +64,12 @@ MONGODB_URI=mongodb://localhost:27017/wtwr_db
 JWT_SECRET=your-secret-key
 NODE_ENV=development
 ```
+
+## Deployment
+
+The application is deployed and accessible at:
+
+- **Frontend**: https://BrianWTWRProject.jumpingcrab.com
+- **Backend API**: https://api.BrianWTWRProject.jumpingcrab.com
+
+The backend is running on a Google Cloud VM with PM2 process management, nginx reverse proxy, and SSL encryption via Let's Encrypt.

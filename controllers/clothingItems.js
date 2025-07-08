@@ -26,7 +26,9 @@ const createItem = (req, res, next) => {
       });
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === "CastError") {
+        next(new BadRequestError("The id string is in an invalid format"));
+      } else if (err.name === "ValidationError") {
         next(new BadRequestError(err.message));
       } else {
         next(err);
@@ -67,7 +69,9 @@ const likeItem = (req, res, next) => {
     })
     .then((item) => res.send(item))
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === "CastError") {
+        next(new BadRequestError("The id string is in an invalid format"));
+      } else if (err.name === "ValidationError") {
         next(new BadRequestError(err.message));
       } else {
         next(err);
@@ -89,7 +93,9 @@ const unlikeItem = (req, res, next) => {
     })
     .then((item) => res.send(item))
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === "CastError") {
+        next(new BadRequestError("The id string is in an invalid format"));
+      } else if (err.name === "ValidationError") {
         next(new BadRequestError(err.message));
       } else {
         next(err);

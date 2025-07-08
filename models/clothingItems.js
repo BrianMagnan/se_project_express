@@ -18,9 +18,10 @@ const clothingSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(value) {
+        const urlWithoutQuery = value.split("?")[0];
         return (
           validator.isURL(value) &&
-          /\.(jpg|jpeg|png|gif|bmp|test)$/i.test(value)
+          /\.(jpg|jpeg|png|gif|bmp|test)$/i.test(urlWithoutQuery)
         );
       },
       message: "You must enter a valid URL",

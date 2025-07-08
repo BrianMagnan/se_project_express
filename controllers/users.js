@@ -6,7 +6,7 @@ const {
   UnauthorizedError,
   ConflictError,
 } = require("../utils/errors");
-const config = require("../utils/config");
+const { JWT_SECRET } = require("../utils/config");
 
 const createUser = async (req, res, next) => {
   const { name, avatar, email, password } = req.body;
@@ -51,8 +51,8 @@ const login = async (req, res, next) => {
   try {
     const user = await User.findUserByCredentials(email, password);
 
-    const token = jwt.sign({ _id: user._id }, config.jwtSecret, {
-      expiresIn: config.jwtExpiresIn,
+    const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+      expiresIn: "7d",
     });
 
     return res.send({ token });
