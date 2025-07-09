@@ -9,6 +9,7 @@ const { errors } = require("celebrate");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const routes = require("./routes");
 const handleError = require("./utils/errors/handleError");
+const { generalLimiter } = require("./middlewares/rateLimiter");
 
 const { PORT = 3001 } = process.env;
 
@@ -18,7 +19,7 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-
+app.use(generalLimiter);
 app.use(requestLogger);
 
 // Crash test endpoint for PM2 testing

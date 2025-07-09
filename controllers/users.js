@@ -95,7 +95,13 @@ const updateUser = (req, res, next) => {
     .select("-password")
     .orFail(() => new NotFoundError("User not found"))
     .then((user) => res.send(user))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        next(new BadRequestError(err.message));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports = {
